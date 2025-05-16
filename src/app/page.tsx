@@ -12,6 +12,9 @@ import { Form as ShadForm, FormControl, FormDescription, FormField, FormItem, Fo
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+
 
 import { Music2, Wand2, BookOpen, Sparkles, Loader2, Info, ArrowLeft } from 'lucide-react';
 
@@ -31,6 +34,7 @@ export default function HomePage() {
   const [remixedLyrics, setRemixedLyrics] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentView, setCurrentView] = useState<View>('form');
+  const [showOriginalLyrics, setShowOriginalLyrics] = useState<boolean>(false);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -54,7 +58,7 @@ export default function HomePage() {
     await new Promise(resolve => setTimeout(resolve, 1000)); 
     
     const placeholderRemix = `(Verse 1 - ${data.theme} Style)\n${song.originalLyrics.split('\n')[0].replace(/,/g, ' in a new way,')}
-${song.originalLyrics.split('\n')[1].replace(/\./g, ' with a ${data.theme} display!')}\n
+${song.originalLyrics.split('\n')[1].replace(/\./g, ` with a ${data.theme} display!`)}\n
 (Chorus - ${data.theme} Beat)\nOh, the ${song.title.toLowerCase().split(' ')[0]} goes ${data.theme}, ${data.theme}, ${data.theme},
 All through the ${data.theme} town!
 Everyone is happy, singing ${data.theme} songs,
@@ -67,6 +71,7 @@ With a cheerful, ${data.theme} sound!`;
   
   const handleBackToForm = () => {
     setCurrentView('form');
+    setShowOriginalLyrics(false); // Reset toggle state
     // Optionally reset form fields or other states if needed
     // form.reset(); 
     // setSelectedSong(null);
@@ -179,8 +184,36 @@ With a cheerful, ${data.theme} sound!`;
             <h2 className="text-3xl font-bold text-center text-primary tracking-tight">
               Your Remix is Ready!
             </h2>
-            <div className="grid md:grid-cols-2 gap-6">
-              <Card className="shadow-lg transform hover:scale-105 transition-transform duration-300 ease-out">
+            
+            <Card className="shadow-lg transform hover:scale-105 transition-transform duration-300 ease-out">
+              <CardHeader>
+                <CardTitle className="text-2xl font-semibold text-foreground/90 flex items-center">
+                  <Wand2 className="mr-2 h-6 w-6 text-accent" /> Remixed Lyrics
+                </CardTitle>
+                <CardDescription className="text-base">{selectedSong.title} - {form.getValues("theme")} Remix</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <p className="whitespace-pre-line text-base text-foreground/80 leading-relaxed">{remixedLyrics}</p>
+              </CardContent>
+              <CardFooter>
+                 <p className="text-sm text-muted-foreground italic">Lyrics generated with a touch of AI magic (placeholder for now)!</p>
+              </CardFooter>
+            </Card>
+
+            <div className="flex items-center space-x-2 py-2 justify-center">
+              <Switch
+                id="show-original-lyrics"
+                checked={showOriginalLyrics}
+                onCheckedChange={setShowOriginalLyrics}
+                aria-label="Show original lyrics"
+              />
+              <Label htmlFor="show-original-lyrics" className="text-sm text-muted-foreground cursor-pointer">
+                Show Original Lyrics
+              </Label>
+            </div>
+
+            {showOriginalLyrics && (
+              <Card className="shadow-lg transform hover:scale-105 transition-transform duration-300 ease-out animate-in fade-in-0 zoom-in-95 duration-300">
                 <CardHeader>
                   <CardTitle className="text-2xl font-semibold text-foreground/90 flex items-center">
                     <BookOpen className="mr-2 h-6 w-6 text-primary" /> Original Lyrics
@@ -191,25 +224,11 @@ With a cheerful, ${data.theme} sound!`;
                   <p className="whitespace-pre-line text-base text-foreground/80 leading-relaxed">{selectedSong.originalLyrics}</p>
                 </CardContent>
               </Card>
-
-              <Card className="shadow-lg transform hover:scale-105 transition-transform duration-300 ease-out">
-                <CardHeader>
-                  <CardTitle className="text-2xl font-semibold text-foreground/90 flex items-center">
-                    <Wand2 className="mr-2 h-6 w-6 text-accent" /> Remixed Lyrics
-                  </CardTitle>
-                  <CardDescription className="text-base">{selectedSong.title} - {form.getValues("theme")} Remix</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="whitespace-pre-line text-base text-foreground/80 leading-relaxed">{remixedLyrics}</p>
-                </CardContent>
-                <CardFooter>
-                   <p className="text-sm text-muted-foreground italic">Lyrics generated with a touch of AI magic (placeholder for now)!</p>
-                </CardFooter>
-              </Card>
-            </div>
+            )}
           </div>
         )}
       </main>
     </div>
   );
 }
+
