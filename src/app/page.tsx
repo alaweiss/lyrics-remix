@@ -176,8 +176,13 @@ With a cheerful, ${data.theme} sound!`;
         )}
 
         {currentView === 'lyrics' && selectedSong && (
-          <div className="space-y-6 animate-in fade-in-50 duration-500">
-             <Button onClick={handleBackToForm} variant="outline" className="mb-2 flex items-center group">
+          <div className="space-y-6 animate-in fade-in-50 duration-500 pt-12"> {/* Added pt-12 to avoid overlap with fixed button */}
+             <Button 
+                onClick={handleBackToForm} 
+                variant="outline" 
+                className="fixed top-4 left-4 z-50 flex items-center group bg-background/80 hover:bg-accent/80"
+                aria-label="Back to remix form"
+              >
               <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" /> Back to Remix
             </Button>
             <Separator />
@@ -231,4 +236,3 @@ With a cheerful, ${data.theme} sound!`;
     </div>
   );
 }
-
