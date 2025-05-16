@@ -8,100 +8,100 @@ body {
 
 @layer base {
   :root {
-    --background: 340 67% 95.3%; /* #FCE4EC - Soft Pink */
-    --foreground: 326 35% 21%; /* #4A233A - Dark Grayish Magenta */
+    --background: 0 0% 100%; /* #FFFFFF - White */
+    --foreground: 220 13% 18%; /* #262B33 - Amazon Charcoal */
 
-    --muted: 340 60% 92%; /* Lighter Pink */
-    --muted-foreground: 330 30% 50%; /* Desaturated Pinkish Gray */
+    --muted: 0 0% 94%; /* #F0F0F0 - Light Gray */
+    --muted-foreground: 0 0% 40%; /* #666666 - Medium Gray */
 
-    --popover: 340 67% 98%; /* Almost White with Pink Hue */
-    --popover-foreground: 326 35% 21%; /* Dark Grayish Magenta */
+    --popover: 0 0% 100%; /* #FFFFFF - White */
+    --popover-foreground: 220 13% 18%; /* #262B33 - Amazon Charcoal */
 
-    --card: 340 67% 97%; /* Slightly Off-White Pink */
-    --card-foreground: 326 35% 21%; /* Dark Grayish Magenta */
+    --card: 0 0% 100%; /* #FFFFFF - White */
+    --card-foreground: 220 13% 18%; /* #262B33 - Amazon Charcoal */
 
-    --border: 340 50% 88%; /* #F8BBD0 - Lighter Pink Border */
-    --input: 340 50% 90%; /* Input Background */
+    --border: 0 0% 87%; /* #DDDDDD - Light Gray Border */
+    --input: 0 0% 80%; /* #CCCCCC - Input Border/Background */
 
-    --primary: 340 82% 76%; /* #F48FB1 - Playful Pink */
-    --primary-foreground: 0 0% 100%; /* White */
+    --primary: 36 100% 50%; /* #FF9900 - Amazon Orange */
+    --primary-foreground: 0 0% 100%; /* #FFFFFF - White (for text on orange buttons) */
 
-    --secondary: 288 40% 85%; /* #E1BEE7 - Lighter Lavender */
-    --secondary-foreground: 288 30% 25%; /* Dark Lavender for text */
+    --secondary: 207 100% 37%; /* #0073BC - Amazon Blue */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF - White */
 
-    --accent: 288 47% 71%; /* #CE93D8 - Lavender */
-    --accent-foreground: 0 0% 100%; /* White */
+    --accent: 39 100% 55%; /* #FFAC33 - Lighter/Brighter Orange (for highlights/hover) */
+    --accent-foreground: 220 13% 10%; /* #171A1F - Very Dark (for text on accent) */
 
-    --destructive: 0 72% 51%; /* Standard Destructive Red */
-    --destructive-foreground: 0 0% 100%; /* White */
+    --destructive: 0 84% 60%; /* #F43F5E - Standard Red */
+    --destructive-foreground: 0 0% 100%; /* #FFFFFF - White */
 
-    --ring: 288 47% 71%; /* Lavender for Focus Ring */
+    --ring: 207 90% 50%; /* #1AA3FF - Amazon Blue (for Focus Ring) */
     
-    --chart-1: 340 82% 76%;
-    --chart-2: 288 47% 71%;
-    --chart-3: 340 60% 85%;
-    --chart-4: 288 35% 75%;
-    --chart-5: 340 40% 80%;
+    --chart-1: 36 100% 50%;  /* Amazon Orange */
+    --chart-2: 207 100% 37%; /* Amazon Blue */
+    --chart-3: 39 100% 60%;  /* Lighter Orange */
+    --chart-4: 207 80% 50%;  /* Lighter Blue */
+    --chart-5: 36 80% 40%;   /* Darker Orange */
 
     --radius: 0.5rem;
 
-    /* Sidebar specific colors - updated to match theme */
-    --sidebar-background: 340 67% 93%; /* Slightly darker soft pink */
-    --sidebar-foreground: 326 35% 21%;
-    --sidebar-primary: 340 82% 70%; /* Slightly muted primary */
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 288 47% 68%; /* Slightly muted accent */
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 340 50% 85%;
-    --sidebar-ring: 288 47% 71%;
+    /* Sidebar specific colors - Amazon theme */
+    --sidebar-background: 0 0% 97%; /* #F7F7F7 - Off-White/Very Light Gray */
+    --sidebar-foreground: 220 13% 18%; /* #262B33 */
+    --sidebar-primary: 36 100% 50%; /* #FF9900 */
+    --sidebar-primary-foreground: 0 0% 100%; /* #FFFFFF */
+    --sidebar-accent: 39 100% 55%; /* #FFAC33 */
+    --sidebar-accent-foreground: 220 13% 10%; /* #171A1F */
+    --sidebar-border: 0 0% 85%; /* #D9D9D9 */
+    --sidebar-ring: 207 90% 50%; /* #1AA3FF */
   }
 
   .dark {
-    /* Dark theme - A contrasting but harmonious dark version */
-    --background: 330 20% 12%; /* Dark Plum/Magenta */
-    --foreground: 340 30% 85%; /* Light Pinkish Gray */
+    /* Dark theme - Amazon-inspired */
+    --background: 220 13% 10%; /* #1A1D21 - Very Dark Blue/Gray */
+    --foreground: 0 0% 95%; /* #F2F2F2 - Light Gray */
 
-    --muted: 330 15% 20%;
-    --muted-foreground: 340 25% 65%;
+    --muted: 220 10% 15%; /* #212529 - Darker Gray */
+    --muted-foreground: 0 0% 60%; /* #999999 */
 
-    --popover: 330 20% 10%;
-    --popover-foreground: 340 30% 85%;
+    --popover: 220 13% 8%; /* #14161A - Even darker */
+    --popover-foreground: 0 0% 95%; /* #F2F2F2 */
 
-    --card: 330 20% 15%;
-    --card-foreground: 340 30% 85%;
+    --card: 220 13% 12%; /* #1D2025 */
+    --card-foreground: 0 0% 95%; /* #F2F2F2 */
 
-    --border: 330 15% 25%;
-    --input: 330 15% 22%;
+    --border: 220 10% 25%; /* #363B42 */
+    --input: 220 10% 20%; /* #2D3137 */
 
-    --primary: 340 70% 65%; /* #E57373 adjusted pink for dark */
-    --primary-foreground: 0 0% 10%; /* Dark text on primary */
+    --primary: 36 100% 55%; /* #FFA500 - Slightly brighter Orange */
+    --primary-foreground: 220 13% 10%; /* #171A1F - Very Dark (for text on orange) */
 
-    --secondary: 288 35% 50%; /* #BA68C8 adjusted lavender for dark */
-    --secondary-foreground: 288 20% 90%; /* Light text on secondary */
+    --secondary: 207 100% 45%; /* #1496E6 - Brighter Blue */
+    --secondary-foreground: 0 0% 100%; /* #FFFFFF */
 
-    --accent: 288 40% 60%; /* #CE93D8 adjusted lavender for dark */
-    --accent-foreground: 0 0% 10%; /* Dark text on accent */
+    --accent: 39 100% 60%; /* #FFB347 - Brighter/Lighter Orange Accent */
+    --accent-foreground: 220 13% 10%; /* #171A1F - Very Dark (for text on accent) */
     
-    --destructive: 0 60% 50%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive: 0 70% 55%; /* #E14A4A */
+    --destructive-foreground: 0 0% 95%; /* #F2F2F2 */
 
-    --ring: 288 40% 60%;
+    --ring: 207 90% 55%; /* #2EA8FF - Brighter blue ring for dark mode */
     
-    --chart-1: 340 70% 65%;
-    --chart-2: 288 40% 60%;
-    --chart-3: 340 50% 55%;
-    --chart-4: 288 30% 50%;
-    --chart-5: 340 30% 50%;
+    --chart-1: 36 100% 55%;
+    --chart-2: 207 100% 45%;
+    --chart-3: 39 100% 65%;
+    --chart-4: 207 80% 55%;
+    --chart-5: 36 80% 45%;
 
     /* Sidebar specific colors for dark theme */
-    --sidebar-background: 330 20% 10%;
-    --sidebar-foreground: 340 30% 80%;
-    --sidebar-primary: 340 70% 60%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 288 40% 55%;
-    --sidebar-accent-foreground: 0 0% 100%;
-    --sidebar-border: 330 15% 20%;
-    --sidebar-ring: 288 40% 60%;
+    --sidebar-background: 220 13% 12%; /* #1D2025 - Same as card for dark mode */
+    --sidebar-foreground: 0 0% 95%; /* #F2F2F2 */
+    --sidebar-primary: 36 100% 55%; /* #FFA500 */
+    --sidebar-primary-foreground: 220 13% 10%; /* #171A1F */
+    --sidebar-accent: 39 100% 60%; /* #FFB347 */
+    --sidebar-accent-foreground: 220 13% 10%; /* #171A1F */
+    --sidebar-border: 220 10% 22%; /* #31363C */
+    --sidebar-ring: 207 90% 55%; /* #2EA8FF */
   }
 }
 
