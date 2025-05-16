@@ -12,9 +12,8 @@ import { Form as ShadForm, FormControl, FormDescription, FormField, FormItem, Fo
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-// import { useToast } from '@/hooks/use-toast'; // Removed useToast import
 
-import { Music2, Wand2, BookOpen, Sparkles, Loader2, Info } from 'lucide-react';
+import { Music2, Wand2, BookOpen, Sparkles, Loader2, Info, ArrowLeft } from 'lucide-react';
 
 import type { Song } from '@/types';
 import { songs as songsData } from '@/lib/songs';
@@ -25,13 +24,13 @@ const formSchema = z.object({
 });
 type FormData = z.infer<typeof formSchema>;
 
+type View = 'form' | 'lyrics';
+
 export default function HomePage() {
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
   const [remixedLyrics, setRemixedLyrics] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [showLyrics, setShowLyrics] = useState<boolean>(false);
-
-  // const { toast } = useToast(); // Removed toast initialization
+  const [currentView, setCurrentView] = useState<View>('form');
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -43,25 +42,15 @@ export default function HomePage() {
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsLoading(true);
-    setShowLyrics(false); // Hide previous lyrics while loading new ones
 
     const song = songsData.find(s => s.id === data.songId);
     if (!song) {
-      // toast({ // Removed toast call
-      //   variant: "destructive",
-      //   title: "Error",
-      //   description: "Selected song not found.",
-      // });
       console.error("Selected song not found.");
       setIsLoading(false);
       return;
     }
     setSelectedSong(song);
-
-    // Placeholder for AI lyric remixing
-    // For now, "Lyric Remix: displays the users inputs"
-    // This means the remixed lyrics will be a placeholder based on song and theme.
-    // Simulating AI call delay
+    
     await new Promise(resolve => setTimeout(resolve, 1000)); 
     
     const placeholderRemix = `(Verse 1 - ${data.theme} Style)\n${song.originalLyrics.split('\n')[0].replace(/,/g, ' in a new way,')}
@@ -73,14 +62,17 @@ With a cheerful, ${data.theme} sound!`;
     
     setRemixedLyrics(placeholderRemix);
     setIsLoading(false);
-    setShowLyrics(true); // Show new lyrics
-
-    // toast({ // Removed toast call
-    //   title: "Remix Complete!",
-    //   description: `"${song.title}" has been remixed with a "${data.theme}" theme.`,
-    // });
+    setCurrentView('lyrics'); 
   };
   
+  const handleBackToForm = () => {
+    setCurrentView('form');
+    // Optionally reset form fields or other states if needed
+    // form.reset(); 
+    // setSelectedSong(null);
+    // setRemixedLyrics("");
+  };
+
   // Effect to pre-populate theme if a song is selected (optional UX enhancement)
   useEffect(() => {
     if (form.watch('songId')) {
@@ -92,92 +84,97 @@ With a cheerful, ${data.theme} sound!`;
   return (
     <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background transition-all duration-500 ease-in-out">
       <main className="w-full max-w-3xl space-y-8">
-        <Card className="shadow-xl overflow-hidden">
-          <CardHeader className="bg-primary/10 p-6">
-            <div className="flex items-center space-x-3">
-              <Music2 className="h-10 w-10 text-primary" />
-              <div>
-                <CardTitle className="text-3xl font-bold tracking-tight text-primary">Nursery Rhyme Remix</CardTitle>
+        {currentView === 'form' && (
+          <Card className="shadow-xl overflow-hidden">
+            <CardHeader className="bg-primary/10 p-6">
+              <div className="flex items-center space-x-3">
+                <Music2 className="h-10 w-10 text-primary" />
+                <div>
+                  <CardTitle className="text-3xl font-bold tracking-tight text-primary">Nursery Rhyme Remix</CardTitle>
+                </div>
               </div>
-            </div>
-          </CardHeader>
-          <CardContent className="p-6">
-            <ShadForm {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="songId"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-lg font-semibold text-foreground/90 flex items-center">
-                        <BookOpen className="mr-2 h-5 w-5 text-accent" /> Select a Song
-                      </FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+            </CardHeader>
+            <CardContent className="p-6">
+              <ShadForm {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                  <FormField
+                    control={form.control}
+                    name="songId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-lg font-semibold text-foreground/90 flex items-center">
+                          <BookOpen className="mr-2 h-5 w-5 text-accent" /> Select a Song
+                        </FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger className="text-base h-12 rounded-lg shadow-sm focus:ring-2 focus:ring-accent">
+                              <SelectValue placeholder="Choose a nursery rhyme..." />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {songsData.map((song) => (
+                              <SelectItem key={song.id} value={song.id} className="text-base">
+                                {song.title}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="theme"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel className="text-lg font-semibold text-foreground/90 flex items-center">
+                          <Sparkles className="mr-2 h-5 w-5 text-accent" /> Enter a Theme
+                        </FormLabel>
                         <FormControl>
-                          <SelectTrigger className="text-base h-12 rounded-lg shadow-sm focus:ring-2 focus:ring-accent">
-                            <SelectValue placeholder="Choose a nursery rhyme..." />
-                          </SelectTrigger>
+                          <Input 
+                            placeholder="e.g., Space Adventure, Pirate Quest, Magical Forest" 
+                            {...field} 
+                            className="text-base h-12 rounded-lg shadow-sm focus:ring-2 focus:ring-accent"
+                          />
                         </FormControl>
-                        <SelectContent>
-                          {songsData.map((song) => (
-                            <SelectItem key={song.id} value={song.id} className="text-base">
-                              {song.title}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+                        <FormDescription className="flex items-center">
+                          <Info className="h-4 w-4 mr-1 text-muted-foreground"/>
+                          What vibe should the remix have?
+                        </FormDescription>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  
+                  <Button 
+                    type="submit" 
+                    disabled={isLoading} 
+                    className="w-full h-12 text-md font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-accent hover:bg-accent/90 text-accent-foreground"
+                    aria-label="Remix the song"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Remixing...
+                      </>
+                    ) : (
+                      <>
+                        <Wand2 className="mr-2 h-5 w-5" /> Remix It!
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </ShadForm>
+            </CardContent>
+          </Card>
+        )}
 
-                <FormField
-                  control={form.control}
-                  name="theme"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel className="text-lg font-semibold text-foreground/90 flex items-center">
-                        <Sparkles className="mr-2 h-5 w-5 text-accent" /> Enter a Theme
-                      </FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="e.g., Space Adventure, Pirate Quest, Magical Forest" 
-                          {...field} 
-                          className="text-base h-12 rounded-lg shadow-sm focus:ring-2 focus:ring-accent"
-                        />
-                      </FormControl>
-                      <FormDescription className="flex items-center">
-                        <Info className="h-4 w-4 mr-1 text-muted-foreground"/>
-                        What vibe should the remix have?
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <Button 
-                  type="submit" 
-                  disabled={isLoading} 
-                  className="w-full h-12 text-md font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-accent hover:bg-accent/90 text-accent-foreground"
-                  aria-label="Remix the song"
-                >
-                  {isLoading ? (
-                    <>
-                      <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Remixing...
-                    </>
-                  ) : (
-                    <>
-                      <Wand2 className="mr-2 h-5 w-5" /> Remix It!
-                    </>
-                  )}
-                </Button>
-              </form>
-            </ShadForm>
-          </CardContent>
-        </Card>
-
-        {showLyrics && selectedSong && (
-          <div className="mt-8 space-y-6 animate-in fade-in-50 duration-500">
+        {currentView === 'lyrics' && selectedSong && (
+          <div className="space-y-6 animate-in fade-in-50 duration-500">
+             <Button onClick={handleBackToForm} variant="outline" className="mb-2 flex items-center group">
+              <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" /> Back to Remix
+            </Button>
             <Separator />
             <h2 className="text-3xl font-bold text-center text-primary tracking-tight">
               Your Remix is Ready!
