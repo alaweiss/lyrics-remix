@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -88,7 +89,7 @@ With a cheerful, ${data.theme} sound!`;
 
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-gradient-to-br from-background to-secondary/30 transition-all duration-500 ease-in-out">
+    <div className="min-h-screen flex flex-col items-center justify-center p-4 bg-background transition-all duration-500 ease-in-out">
       <main className="w-full max-w-3xl space-y-8">
         <Card className="shadow-xl overflow-hidden">
           <CardHeader className="bg-primary/10 p-6">
