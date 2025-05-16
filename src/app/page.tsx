@@ -35,6 +35,7 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [currentView, setCurrentView] = useState<View>('form');
   const [showOriginalLyrics, setShowOriginalLyrics] = useState<boolean>(false);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false);
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -43,6 +44,22 @@ export default function HomePage() {
       theme: "",
     },
   });
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 10); // Threshold of 10px
+    };
+
+    if (currentView === 'lyrics') {
+      window.addEventListener('scroll', handleScroll);
+      handleScroll(); // Initial check
+      return () => {
+        window.removeEventListener('scroll', handleScroll);
+      };
+    } else {
+      setIsScrolled(false); // Reset when not in lyrics view
+    }
+  }, [currentView]);
 
   const onSubmit: SubmitHandler<FormData> = async (data) => {
     setIsLoading(true);
@@ -72,10 +89,6 @@ With a cheerful, ${data.theme} sound!`;
   const handleBackToForm = () => {
     setCurrentView('form');
     setShowOriginalLyrics(false); // Reset toggle state
-    // Optionally reset form fields or other states if needed
-    // form.reset(); 
-    // setSelectedSong(null);
-    // setRemixedLyrics("");
   };
 
   // Effect to pre-populate theme if a song is selected (optional UX enhancement)
@@ -176,14 +189,18 @@ With a cheerful, ${data.theme} sound!`;
         )}
 
         {currentView === 'lyrics' && selectedSong && (
-          <div className="space-y-6 animate-in fade-in-50 duration-500 pt-12"> {/* Added pt-12 to avoid overlap with fixed button */}
+          <div className="space-y-6 animate-in fade-in-50 duration-500 pt-20 max-w-2xl mx-auto"> {/* Adjusted pt and max-w */}
              <Button 
                 onClick={handleBackToForm} 
-                variant="outline" 
-                className="fixed top-4 left-4 z-50 flex items-center group bg-background/80 hover:bg-accent/80"
+                variant="outline"
+                size={isScrolled ? "icon" : "default"}
+                className="fixed top-4 left-4 z-50 group bg-background/80 hover:bg-accent/80"
                 aria-label="Back to remix form"
               >
-              <ArrowLeft className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1" /> Back to Remix
+              <ArrowLeft className={`h-4 w-4 transition-transform group-hover:-translate-x-1 ${!isScrolled ? 'mr-2' : ''}`} />
+              {!isScrolled && (
+                <span>Back to Remix</span>
+              )}
             </Button>
             <Separator />
             <h2 className="text-3xl font-bold text-center text-primary tracking-tight">
