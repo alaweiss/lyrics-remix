@@ -97,7 +97,6 @@ With a cheerful, ${data.theme} sound!`;
               <Music2 className="h-10 w-10 text-primary" />
               <div>
                 <CardTitle className="text-3xl font-bold tracking-tight text-primary">Nursery Rhyme Remix</CardTitle>
-                <CardDescription className="text-lg text-foreground/80">Give classic rhymes a modern, themed twist!</CardDescription>
               </div>
             </div>
           </CardHeader>
