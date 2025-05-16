@@ -12,7 +12,7 @@ import { Form as ShadForm, FormControl, FormDescription, FormField, FormItem, Fo
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { useToast } from '@/hooks/use-toast';
+// import { useToast } from '@/hooks/use-toast'; // Removed useToast import
 
 import { Music2, Wand2, BookOpen, Sparkles, Loader2, Info } from 'lucide-react';
 
@@ -31,7 +31,7 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [showLyrics, setShowLyrics] = useState<boolean>(false);
 
-  const { toast } = useToast();
+  // const { toast } = useToast(); // Removed toast initialization
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -47,11 +47,12 @@ export default function HomePage() {
 
     const song = songsData.find(s => s.id === data.songId);
     if (!song) {
-      toast({
-        variant: "destructive",
-        title: "Error",
-        description: "Selected song not found.",
-      });
+      // toast({ // Removed toast call
+      //   variant: "destructive",
+      //   title: "Error",
+      //   description: "Selected song not found.",
+      // });
+      console.error("Selected song not found.");
       setIsLoading(false);
       return;
     }
@@ -74,10 +75,10 @@ With a cheerful, ${data.theme} sound!`;
     setIsLoading(false);
     setShowLyrics(true); // Show new lyrics
 
-    toast({
-      title: "Remix Complete!",
-      description: `"${song.title}" has been remixed with a "${data.theme}" theme.`,
-    });
+    // toast({ // Removed toast call
+    //   title: "Remix Complete!",
+    //   description: `"${song.title}" has been remixed with a "${data.theme}" theme.`,
+    // });
   };
   
   // Effect to pre-populate theme if a song is selected (optional UX enhancement)
@@ -157,16 +158,16 @@ With a cheerful, ${data.theme} sound!`;
                 <Button 
                   type="submit" 
                   disabled={isLoading} 
-                  className="w-full h-14 text-lg font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-accent hover:bg-accent/90 text-accent-foreground"
+                  className="w-full h-12 text-md font-semibold rounded-lg shadow-md hover:shadow-lg transition-all duration-300 ease-in-out bg-accent hover:bg-accent/90 text-accent-foreground"
                   aria-label="Remix the song"
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="mr-2 h-6 w-6 animate-spin" /> Remixing...
+                      <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Remixing...
                     </>
                   ) : (
                     <>
-                      <Wand2 className="mr-2 h-6 w-6" /> Remix It!
+                      <Wand2 className="mr-2 h-5 w-5" /> Remix It!
                     </>
                   )}
                 </Button>
