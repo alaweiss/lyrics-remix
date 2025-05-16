@@ -182,7 +182,7 @@ With a cheerful, ${data.theme} sound!`;
             </Button>
             <Separator />
             <h2 className="text-3xl font-bold text-center text-primary tracking-tight">
-              Your Remix is Ready!
+              Remixed {selectedSong.title}
             </h2>
             
             <Card className="shadow-lg transform hover:scale-105 transition-transform duration-300 ease-out">
