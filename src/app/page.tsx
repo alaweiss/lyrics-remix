@@ -14,12 +14,14 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Separator } from '@/components/ui/separator';
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 
 
 import { Music2, Wand2, BookOpen, Sparkles, Loader2, Info, ArrowLeft } from 'lucide-react';
 
 import type { Song } from '@/types';
 import { songs as songsData } from '@/lib/songs';
+import { remixLyrics, type RemixLyricsInput, type RemixLyricsOutput } from '@/ai/flows/remix-lyrics-flow';
 
 const formSchema = z.object({
   songId: z.string().min(1, "Please select a song."),
@@ -36,6 +38,7 @@ export default function HomePage() {
   const [currentView, setCurrentView] = useState<View>('form');
   const [showOriginalLyrics, setShowOriginalLyrics] = useState<boolean>(false);
   const [isScrolled, setIsScrolled] = useState<boolean>(false);
+  const { toast } = useToast();
 
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
@@ -67,23 +70,35 @@ export default function HomePage() {
     const song = songsData.find(s => s.id === data.songId);
     if (!song) {
       console.error("Selected song not found.");
+      toast({
+        title: "Error",
+        description: "Selected song could not be found. Please try again.",
+        variant: "destructive",
+      });
       setIsLoading(false);
       return;
     }
     setSelectedSong(song);
     
-    await new Promise(resolve => setTimeout(resolve, 1000)); 
-    
-    const placeholderRemix = `(Verse 1 - ${data.theme} Style)\n${song.originalLyrics.split('\n')[0].replace(/,/g, ' in a new way,')}
-${song.originalLyrics.split('\n')[1].replace(/\./g, ` with a ${data.theme} display!`)}\n
-(Chorus - ${data.theme} Beat)\nOh, the ${song.title.toLowerCase().split(' ')[0]} goes ${data.theme}, ${data.theme}, ${data.theme},
-All through the ${data.theme} town!
-Everyone is happy, singing ${data.theme} songs,
-With a cheerful, ${data.theme} sound!`;
-    
-    setRemixedLyrics(placeholderRemix);
-    setIsLoading(false);
-    setCurrentView('lyrics'); 
+    try {
+      const flowInput: RemixLyricsInput = {
+        songTitle: song.title,
+        originalLyrics: song.originalLyrics,
+        theme: data.theme,
+      };
+      const flowResponse: RemixLyricsOutput = await remixLyrics(flowInput);
+      setRemixedLyrics(flowResponse.remixedLyrics);
+      setCurrentView('lyrics'); 
+    } catch (error) {
+      console.error("Error remixing lyrics:", error);
+      toast({
+        title: "Remix Error",
+        description: "Could not generate remixed lyrics. Please try again later.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
   
   const handleBackToForm = () => {
@@ -189,7 +204,7 @@ With a cheerful, ${data.theme} sound!`;
         )}
 
         {currentView === 'lyrics' && selectedSong && (
-          <div className="space-y-6 animate-in fade-in-50 duration-500 pt-20 max-w-2xl mx-auto"> {/* Adjusted pt and max-w */}
+          <div className="space-y-6 animate-in fade-in-50 duration-500 pt-20 max-w-2xl mx-auto">
              <Button 
                 onClick={handleBackToForm} 
                 variant="outline"
@@ -218,7 +233,7 @@ With a cheerful, ${data.theme} sound!`;
                 <p className="whitespace-pre-line text-base text-foreground/80 leading-relaxed">{remixedLyrics}</p>
               </CardContent>
               <CardFooter>
-                 <p className="text-sm text-muted-foreground italic">Lyrics generated with a touch of AI magic (placeholder for now)!</p>
+                 <p className="text-sm text-muted-foreground italic">Lyrics generated with AI by Gemini.</p>
               </CardFooter>
             </Card>
 
